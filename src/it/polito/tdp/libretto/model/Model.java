@@ -3,6 +3,8 @@ package it.polito.tdp.libretto.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.polito.tdp.libretto.db.EsameDAO;
+
 public class Model {
 	
 	private List<Esame> esami ;
@@ -13,17 +15,17 @@ public class Model {
 	
 	/**
 	 * Aggiunge un nuovo esame all'elenco degli esami presenti,
-	 * verificando che non ci sia già
+	 * verificando che non ci sia giï¿½
 	 * @param e
-	 * @return true se l'ha inserito, false se esisteva già e quindi non l'ha potuto inserire
+	 * @return true se l'ha inserito, false se esisteva giï¿½ e quindi non l'ha potuto inserire
 	 */
 	public boolean addEsame(Esame e) {
-		if(!esami.contains(e)) {
-			esami.add(e) ;
-			return true ;
-		} else {
+		
+		EsameDAO dao = new EsameDAO() ;
+		if(dao.find(e.getCodice())==null)
+			return dao.create(e) ;
+		else 
 			return false ;
-		}
 	}
 	
 	/**
@@ -33,12 +35,9 @@ public class Model {
 	 * @return l'esame trovato, oppure null se non trovato
 	 */
 	public Esame trovaEsame(String codice) {
-		int pos = esami.indexOf( new Esame(codice, null, null) ) ;
-		if(pos==-1) {
-			return null ;
-		} else {
-			return esami.get(pos) ;
-		}
+		EsameDAO dao = new EsameDAO() ;
+		
+		return dao.find(codice) ;
 	}
 
 }
